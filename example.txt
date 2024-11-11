@@ -1,0 +1,47 @@
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.optimizers import Adam
+
+# Function to build the model
+def build_model(activation_function='relu', learning_rate=0.001):
+    model = Sequential()
+    # Input layer (number of neurons = number of features)
+    model.add(Dense(units=64, activation=activation_function, input_dim=X_train.shape[1]))
+    # Hidden layer
+    model.add(Dense(units=32, activation=activation_function))
+    # Output layer (1 neuron, sigmoid activation for binary classification)
+    model.add(Dense(units=1, activation='sigmoid'))
+    
+    # Compile the model with the given learning rate
+    optimizer = Adam(lr=learning_rate)
+    model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+    
+    return model
+
+# Build the model
+model = build_model(activation_function='relu', learning_rate=0.001)
+
+# Train the model
+history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))
+
+# Plot the training and validation loss
+import matplotlib.pyplot as plt
+
+plt.plot(history.history['loss'], label='Train Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Loss Over Epochs')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+
+# Evaluate the model on the test set
+loss, accuracy = model.evaluate(X_test, y_test)
+print(f'Final Test Loss: {loss:.4f}, Test Accuracy: {accuracy:.4f}')
+
+# Making predictions
+predictions = model.predict(X_test)
+predictions = (predictions > 0.5).astype(int)  # Convert probabilities to 0 or 1
+
+# Compare predictions to actual labels
+print("Predictions:", predictions.flatten())
