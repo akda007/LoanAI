@@ -1,6 +1,8 @@
-from keras.models import Sequential
-from keras.layers import Dense, BatchNormalization, Dropout
-from keras.optimizers import Adam
+from keras.api.models import Sequential
+from keras.api.layers import Dense, BatchNormalization, Dropout
+from keras.api.optimizers import Adam
+
+
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 import numpy as np
